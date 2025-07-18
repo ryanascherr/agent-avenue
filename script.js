@@ -1,12 +1,5 @@
 let agents = [
     {
-        name: "Double Agent",
-        quantity: 6,
-        one: -1,
-        two: 6,
-        three: -1
-    },
-    {
         name: "Codebreaker",
         quantity: 6,
         one: 0,
@@ -19,6 +12,13 @@ let agents = [
         one: 2,
         two: 3,
         three: "Lose" 
+    },
+    {
+        name: "Double Agent",
+        quantity: 6,
+        one: -1,
+        two: 6,
+        three: -1
     },
     {
         name: "Enforcer",
@@ -52,6 +52,35 @@ let agents = [
         one: 4,
 
     }
-]
+];
+let deck = [];
+let dealStartingHandsBtn = document.querySelector(".js_deal-starting-hands");
+let playerHand = [];
+let computerHand = [];
 
-console.log(agents[0].name);
+makeDeck();
+function makeDeck() {
+    agents.forEach(function(agent, index) {
+        for (let i = 0; i < agent.quantity; i++) {
+            deck.push(agent.name);
+        }
+    });
+
+    document.querySelector(".js_cards-left").textContent = deck.length;
+}
+
+dealStartingHandsBtn.addEventListener('click', () => {
+    dealCards(playerHand, 4);
+    dealCards(computerHand, 4);
+});
+
+function dealCards(hand, numberOfCards) {
+
+    for (let i = 0; i < numberOfCards; i++) {
+        let randomNumber = Math.floor(Math.random() * deck.length);
+        hand.push(deck[randomNumber]);
+        deck.splice(randomNumber, 1);
+    }
+
+    document.querySelector(".js_cards-left").textContent = deck.length;
+}
