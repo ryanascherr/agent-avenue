@@ -1,0 +1,18 @@
+.board {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
+}
+.board__section {
+  border: 2px solid black;
+  padding: 2rem;
+}
+.board__section--hidden {
+  visibility: hidden;
+}
+.board__home--green {
+  background-color: green;
+}
+.board__home--blue {
+  background-color: blue;
+}/*# sourceMappingURL=main.css.map */

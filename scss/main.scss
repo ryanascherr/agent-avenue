@@ -1,0 +1,23 @@
+.board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 1rem;
+
+    &__section {
+        border: 2px solid black;
+        padding: 2rem;
+
+        &--hidden {
+            visibility: hidden;
+        }
+    }
+
+    &__home {
+        &--green {
+            background-color: green;
+        }
+        &--blue {
+            background-color: blue;
+        }
+    }
+}
