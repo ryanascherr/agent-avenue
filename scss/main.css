@@ -1,11 +1,11 @@
 .board {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
 }
 .board__section {
   border: 2px solid black;
-  padding: 2rem;
+  padding: 1rem;
 }
 .board__section--hidden {
   visibility: hidden;
@@ -19,5 +19,5 @@
 
 .card {
   border-radius: 1.5rem;
-  max-width: 150px;
+  max-width: 100px;
 }/*# sourceMappingURL=main.css.map */
