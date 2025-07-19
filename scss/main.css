@@ -15,4 +15,9 @@
 }
 .board__home--blue {
   background-color: blue;
+}
+
+.card {
+  border-radius: 1.5rem;
+  max-width: 150px;
 }/*# sourceMappingURL=main.css.map */

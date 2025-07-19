@@ -8,29 +8,39 @@
 </head>
 <body>
     <div class="board">
-        <div class="board__section"></div>
-        <div class="board__section"></div>
-        <div class="board__section"></div>
-        <div class="board__section"></div>
-        <div class="board__section"></div>
+        <div class="board__section" data-space="3"></div>
+        <div class="board__section" data-space="4"></div>
+        <div class="board__section" data-space="5"></div>
+        <div class="board__section" data-space="6"></div>
+        <div class="board__section" data-space="2"></div>
         <div class="board__section board__section--hidden"></div>
         <div class="board__section board__section--hidden"></div>
-        <div class="board__section"></div>
-        <div class="board__section board__home board__home--green"></div>
+        <div class="board__section" data-space="7"></div>
+        <div class="board__section board__home board__home--green" data-space="1">Player</div>
         <div class="board__section">Cards Left: <span class="js_cards-left"></span></div>
+        <div class="board__section">
+            <button class="js_deal-starting-hands">Deal starting hands</button>
+        </div>
+        <div class="board__section board__home board__home--blue" data-space="8">Computer</div>
+        <div class="board__section" data-space="14"></div>
         <div class="board__section board__section--hidden"></div>
-        <div class="board__section board__home board__home--blue"></div>
-        <div class="board__section"></div>
         <div class="board__section board__section--hidden"></div>
-        <div class="board__section board__section--hidden"></div>
-        <div class="board__section"></div>
-        <div class="board__section"></div>
-        <div class="board__section"></div>
-        <div class="board__section"></div>
-        <div class="board__section"></div>
+        <div class="board__section" data-space="9"></div>
+        <div class="board__section" data-space="13"></div>
+        <div class="board__section" data-space="12"></div>
+        <div class="board__section" data-space="11"></div>
+        <div class="board__section" data-space="10"></div>
     </div>
 
-    <button class="js_deal-starting-hands">Deal starting hands</button>
+    <label for="face-up">Choose a face-up card:</label>
+    <select class="js_face-up" id="face-up" name="face-up"></select>
+
+    <label for="face-down">Choose a face-down card:</label>
+    <select class="js_face-down" id="face-down" name="face-down"></select>
+
+    <button class="js_submit">Submit</button>
+
+    <div class="hand js_player-hand"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="module" src="./script.js"></script>
