@@ -162,8 +162,8 @@ submitBtn.addEventListener('click', () => {
 
     console.log(human.name + "'s hand is:");
     console.log(human.hand);
-    console.log("Face-up card is " + faceUpCardName);
-    console.log("Face-down card is " + faceDownCardName);
+    console.log("Face-up card is " + faceUpCardName + ".");
+    console.log("Face-down card is " + faceDownCardName + ".");
 
     if (faceUpCardName === faceDownCardName) {
         console.log("Can't choose the same two cards.");
@@ -171,7 +171,9 @@ submitBtn.addEventListener('click', () => {
         removeCardsFromHand(human, faceUpCardIndex, faceDownCardIndex);
         dealCards(human, 2);
         displayHand(human);
+        computerPicksCard(faceUpCardName, faceDownCardName);
     }
+
 });
 
 function removeCardsFromHand(player, faceUpCardIndex, faceDownCardIndex) {
@@ -206,18 +208,95 @@ function removeCardsFromHand(player, faceUpCardIndex, faceDownCardIndex) {
     
 }
 
+function computerPicksCard(faceUpCard, faceDownCard) {
+    let randomNumber = Math.floor(Math.random() * (2 - 1 + 1) + 1);
+    let pickedCard = randomNumber === 1 ? faceUpCard : faceDownCard;
+    let otherCard = "";
+
+    if (pickedCard === faceUpCard) {
+        otherCard = faceDownCard;
+    }
+    if (pickedCard === faceDownCard) {
+        otherCard = faceUpCard;
+    }
+
+    console.log("Computer takes " + pickedCard + ".");
+    console.log("Human gets " + otherCard + ".");
+
+    addToTableau(human, otherCard);
+    addToTableau(computer, pickedCard);
+}
+
+function addToTableau(player, pickedCard) {
+    let count = 0;
+    let movement = 0;
+
+    player.tableau.push(pickedCard);
+    console.log(player.tableau);
+
+    for (let i = 0; i < player.tableau.length; i++) {
+        if (player.tableau[i] === pickedCard) {
+            count++;
+        }
+    }
+
+    let cardObject = {};
+    agents.forEach(function(agent, index) {
+        if (agent.name === pickedCard) {
+            cardObject = agent;
+        }
+    });
+
+    if (count === 1) {
+        movement = cardObject.one;
+    }
+    if (count === 2) {
+        movement = cardObject.two;
+    }
+    if (count >= 3) {
+        movement = cardObject.three;
+    }
+    
+    switch (count) {
+        case 1:
+            movement = cardObject.one;
+            break;
+        case 2:
+            movement = cardObject.two;
+            break;
+        case 3:
+            if (typeof cardObject.three === "number") {
+                movement = cardObject.three;
+            } else {
+                console.log("Game over! " + cardObject.three + ".");
+            }
+            break;
+        default:
+            console.log("Shouldn't be seeing this...");
+    }
+
+    moveSpaces(player, movement);
+}
+
 function moveSpaces(player, number) {
     let currentSpace = player.space;
     let currentSpaceElem = document.querySelector(`[data-space="${currentSpace}"]`);
     let newSpace = currentSpace + number;
 
+    console.log(number);
+    console.log(currentSpace);
+    console.log(newSpace);
+
     if (newSpace > 14) {
-        newSpace = newSpace - 14;
+        newSpace -= 14;
+    }
+    if (newSpace < 1) {
+        newSpace += 14;
     }
 
     currentSpaceElem.textContent = "";
     let newSpaceElem = document.querySelector(`[data-space="${newSpace}"]`);
-    newSpaceElem.textContent = "Human";
+    newSpaceElem.textContent = player.name;
 
     player.space = newSpace;
 }
