@@ -57,13 +57,15 @@ let human = {
     name: "Human",
     hand: [],
     tableau: [],
-    space: 1
+    space: 1,
+    number: 1
 };
 let computer = {
     name: "Computer",
     hand: [],
     tableau: [],
-    space: 8
+    space: 8,
+    number: 8
 }
 let deck = [];
 let dealStartingHandsBtn = document.querySelector(".js_deal-starting-hands");
@@ -225,6 +227,8 @@ function computerPicksCard(faceUpCard, faceDownCard) {
 
     addToTableau(human, otherCard);
     addToTableau(computer, pickedCard);
+
+    checkIfWin();
 }
 
 function addToTableau(player, pickedCard) {
@@ -283,10 +287,6 @@ function moveSpaces(player, number) {
     let currentSpaceElem = document.querySelector(`[data-space="${currentSpace}"]`);
     let newSpace = currentSpace + number;
 
-    console.log(number);
-    console.log(currentSpace);
-    console.log(newSpace);
-
     if (newSpace > 14) {
         newSpace -= 14;
     }
@@ -294,9 +294,27 @@ function moveSpaces(player, number) {
         newSpace += 14;
     }
 
+    console.log(player.name + " moves " + number + " spaces.");
+
     currentSpaceElem.textContent = "";
     let newSpaceElem = document.querySelector(`[data-space="${newSpace}"]`);
     newSpaceElem.textContent = player.name;
 
+    player.number += number;
     player.space = newSpace;
+}
+
+function checkIfWin() {
+    let humanNumber = human.number;
+    let computerNumber = computer.number;
+
+    let difference = computer.number - human.number;
+
+    console.log(humanNumber, computerNumber, difference);
+
+    if (difference <= 0 || difference >= 14) {
+        console.log("Game over!");
+    } else {
+        console.log("Game continues!");
+    }
 }
