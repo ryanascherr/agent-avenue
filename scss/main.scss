@@ -1,11 +1,40 @@
+button {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .board {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: .5rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 
     &__section {
         border: 2px solid black;
         padding: 1rem;
+        max-height: 36px;
+        // height: 50px;
+        // width: 75px;
+        // margin: 0 auto;
+
+        &--top-left-curve {
+            border-top-left-radius: 10px;
+        }
+
+        &--top-right-curve {
+            border-top-right-radius: 10px;
+        }
+
+        &--bottom-left-curve {
+            border-bottom-left-radius: 10px;
+        }
+
+        &--bottom-right-curve {
+            border-bottom-right-radius: 10px;
+        }
 
         &--hidden {
             visibility: hidden;
@@ -24,5 +53,55 @@
 
 .card {
     border-radius: 1.5rem;
-    max-width: 100px;
+    max-width: 175px;
+    // margin-right: .5rem;
+    // margin-left: .5rem;
+}
+
+.hand {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    bottom: .5rem;
+    transition: all .5s;
+
+    &--hide {
+        transform: translateY(50%);
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: .5rem;
+        margin-left: .5rem;
+    }
+
+    &__btns {
+        margin-bottom: .5rem;
+    }
+
+    &__btn {
+
+        &--selected {
+            background-color: black;
+            color: white;
+        }
+    }
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    visibility: hidden;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    &__player-confirm {
+        display: none;
+    }
 }

@@ -69,11 +69,16 @@ let computer = {
 }
 let deck = [];
 let dealStartingHandsBtn = document.querySelector(".js_deal-starting-hands");
-let faceUpSelect = document.querySelector(".js_face-up");
-let faceDownSelect = document.querySelector(".js_face-down");
-let submitBtn = document.querySelector(".js_submit");
+// let faceUpSelect = document.querySelector(".js_face-up");
+// let faceDownSelect = document.querySelector(".js_face-down");
+// let submitBtn = document.querySelector(".js_submit");
+let actions = document.querySelector(".actions");
+let instructions = document.querySelector(".actions__instructions");
 let humanSpace = 1;
 let computerSpace = 8;
+let isHumanTurn = true;
+let isFaceUpSelected = false;
+let isFaceDownSelected = false;
 
 makeDeck();
 function makeDeck() {
@@ -94,6 +99,7 @@ dealStartingHandsBtn.addEventListener('click', () => {
     dealCards(computer, 4);
 
     displayHand(human);
+    startTurn();
 });
 
 function dealCards(player, numberOfCards) {
@@ -121,8 +127,8 @@ function displayHand(player) {
 
     console.log("-Emptying hands-");
     handElem.innerHTML = "";
-    faceUpSelect.innerHTML = "";
-    faceDownSelect.innerHTML = "";
+    // faceUpSelect.innerHTML = "";
+    // faceDownSelect.innerHTML = "";
 
     console.log("-Appending cards-");
     for (let i = 0; i < hand.length; i++) {
@@ -130,11 +136,24 @@ function displayHand(player) {
         agentName = agentName.toLowerCase();
         agentName = agentName.replaceAll(" ", "-");
 
-        let img = document.createElement('img');
-        img.setAttribute('src', `./img/agent_${agentName}.png`);
-        img.setAttribute('data-name', `${hand[i]}`);
-        img.classList.add("card");
-        handElem.appendChild(img);
+        let div = document.createElement('div');
+        div.innerHTML = `
+            <div class="hand__item" data-index="${i}">
+                <div class="hand__btns">
+                    <button class="btn hand__btn js_hand-btn" data-face="up">Face-Up</button>
+                    <button class="btn hand__btn js_hand-btn" data-face="down">Face-Down</button>
+                </div>
+                <img class="card" src="./img/agent_${agentName}.png" data-name="${hand[i]}">
+            </div>
+        `;
+
+        handElem.appendChild(div);
+
+        // let img = document.createElement('img');
+        // img.setAttribute('src', `./img/agent_${agentName}.png`);
+        // img.setAttribute('data-name', `${hand[i]}`);
+        // img.classList.add("card");
+        // handElem.appendChild(img);
 
         let option = document.createElement('option');
         option.setAttribute('value', hand[i]);
@@ -146,37 +165,45 @@ function displayHand(player) {
         optionCopy.setAttribute('data-index', i);
         optionCopy.innerText = hand[i];
 
-        faceUpSelect.append(option);
-        faceDownSelect.append(optionCopy);
+        // faceUpSelect.append(option);
+        // faceDownSelect.append(optionCopy);
     }
 }
 
-submitBtn.addEventListener('click', () => {
-    console.log("---SUBMITTING CARDS---");
+function startTurn() {
+    if (isHumanTurn === true) {
+        instructions.textContent = "Choose a card to be placed face-up and face-down."
+        actions.style.visibility = "visible";
 
-    let faceUpElem = faceUpSelect.selectedOptions[0];
-    let faceUpCardIndex = parseInt(faceUpElem.getAttribute('data-index'));
-    let faceUpCardName = faceUpSelect.value;
-
-    let faceDownElem = faceDownSelect.selectedOptions[0];
-    let faceDownCardIndex = parseInt(faceDownElem.getAttribute('data-index'));
-    let faceDownCardName = faceDownSelect.value;
-
-    console.log(human.name + "'s hand is:");
-    console.log(human.hand);
-    console.log("Face-up card is " + faceUpCardName + ".");
-    console.log("Face-down card is " + faceDownCardName + ".");
-
-    if (faceUpCardName === faceDownCardName) {
-        console.log("Can't choose the same two cards.");
-    } else {
-        removeCardsFromHand(human, faceUpCardIndex, faceDownCardIndex);
-        dealCards(human, 2);
-        displayHand(human);
-        computerPicksCard(faceUpCardName, faceDownCardName);
     }
+}
 
-});
+// submitBtn.addEventListener('click', () => {
+    // console.log("---SUBMITTING CARDS---");
+
+    // let faceUpElem = faceUpSelect.selectedOptions[0];
+    // let faceUpCardIndex = parseInt(faceUpElem.getAttribute('data-index'));
+    // let faceUpCardName = faceUpSelect.value;
+
+    // let faceDownElem = faceDownSelect.selectedOptions[0];
+    // let faceDownCardIndex = parseInt(faceDownElem.getAttribute('data-index'));
+    // let faceDownCardName = faceDownSelect.value;
+
+    // console.log(human.name + "'s hand is:");
+    // console.log(human.hand);
+    // console.log("Face-up card is " + faceUpCardName + ".");
+    // console.log("Face-down card is " + faceDownCardName + ".");
+
+    // if (faceUpCardName === faceDownCardName) {
+    //     console.log("Can't choose the same two cards.");
+    // } else {
+    //     removeCardsFromHand(human, faceUpCardIndex, faceDownCardIndex);
+    //     dealCards(human, 2);
+    //     displayHand(human);
+    //     computerPicksCard(faceUpCardName, faceDownCardName);
+    // }
+
+// });
 
 function removeCardsFromHand(player, faceUpCardIndex, faceDownCardIndex) {
     if (faceUpCardIndex > faceDownCardIndex) {
@@ -298,6 +325,7 @@ function moveSpaces(player, number) {
 
     currentSpaceElem.textContent = "";
     let newSpaceElem = document.querySelector(`[data-space="${newSpace}"]`);
+    
     newSpaceElem.textContent = player.name;
 
     player.number += number;
@@ -316,5 +344,53 @@ function checkIfWin() {
         console.log("Game over!");
     } else {
         console.log("Game continues!");
+    }
+}
+
+document.addEventListener('click', function(event) {
+  if (event.target.matches('.js_hand-btn')) {
+    let buttonClicked = event.target;
+
+    if (buttonClicked.classList.contains("hand__btn--selected")) return;
+
+    let parentElem = buttonClicked.closest(".hand__item");
+
+    let allFaceUpButtons = document.querySelectorAll('[data-face="up"]');
+    let allFaceDownButtons = document.querySelectorAll('[data-face="down"]');
+
+    let buttonsToChange = [];
+
+    if (buttonClicked.getAttribute("data-face") === "up") {
+        buttonsToChange = allFaceUpButtons;
+        isFaceUpSelected = true;
+    }
+    if (buttonClicked.getAttribute("data-face") === "down") {
+        buttonsToChange = allFaceDownButtons;
+        isFaceDownSelected = true;
+    }
+
+    buttonsToChange.forEach((button) => {
+        button.classList.remove("hand__btn--selected");
+    });
+
+    let familyButtons = parentElem.querySelectorAll('.hand__btn');
+    familyButtons.forEach((button) => {
+        button.classList.remove("hand__btn--selected");
+    });
+
+    buttonClicked.classList.add("hand__btn--selected");
+
+    checkForSubmit();
+  }
+});
+
+function checkForSubmit() {
+    let selectedCards = document.querySelectorAll(".hand__btn--selected");
+    let numberOfSelectedCards = selectedCards.length;
+
+    if (isFaceUpSelected && isFaceDownSelected && numberOfSelectedCards == 2) {
+        document.querySelector(".js_player-confirm").style.display = "block";
+    } else {
+        document.querySelector(".js_player-confirm").style.display = "none";
     }
 }
